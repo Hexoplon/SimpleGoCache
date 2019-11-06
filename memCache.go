@@ -35,11 +35,11 @@ func (c *MemCache) AddToCache(content []byte, key string) error {
 	if c.InCache(key) {
 		return errors.New(ErrorAlreadyExists)
 	}
-	if c.toLarge(&content) {
+	if c.tooLarge(&content) {
 		return errors.New(ErrorTooLarge)
 	}
 
-	if c.toLong() {
+	if c.tooLong() {
 		return errors.New(ErrorTooManyEntries)
 	}
 
@@ -78,11 +78,11 @@ func (c *MemCache) DeleteFromCache(key string) {
 
 // UpdateCache - Update the contents of a key already in cache
 func (c *MemCache) UpdateCache(content []byte, key string) error {
-	if c.toLarge(&content) {
+	if c.tooLarge(&content) {
 		return errors.New(ErrorTooLarge)
 	}
 
-	if c.toLong() {
+	if c.tooLong() {
 		return errors.New(ErrorTooManyEntries)
 	}
 
@@ -118,10 +118,15 @@ func (c *MemCache) expired(key string) bool {
 	return false
 }
 
-func (c *MemCache) toLarge(content *[]byte) bool {
+func (c *MemCache) tooLarge(content *[]byte) bool {
 	return len(*content) > c.MaxElementSize
 }
 
-func (c *MemCache) toLong() bool {
-	return len(c.Entries) >= c.MaxElements
+func (c *MemCache) tooLong() bool {
+	if len(c.Entries) >= c.MaxElements {
+		c.Prune()
+		return len(c.Entries) >= c.MaxElements
+	}
+	return false
+
 }
