@@ -26,5 +26,6 @@ type Cache interface {
 	DeleteFromCache()
 	UpdateCache()
 	Prune()
+	Close()
 	expired()
 }
