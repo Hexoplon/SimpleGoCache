@@ -35,7 +35,6 @@ func (c *MemCache) AddToCache(content []byte, key string) error {
 	if c.InCache(key) {
 		return errors.New(ErrorAlreadyExists)
 	}
-
 	if c.toLarge(&content) {
 		return errors.New(ErrorTooLarge)
 	}
@@ -113,7 +112,7 @@ func (c *MemCache) Close() {
 
 // expired - checks if a cache entry has expired
 func (c *MemCache) expired(key string) bool {
-	if c.Entries[key].Created > time.Now().Unix()-c.TTL {
+	if c.Entries[key].Created+c.TTL < time.Now().Unix() {
 		return true
 	}
 	return false
