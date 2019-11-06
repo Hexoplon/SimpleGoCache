@@ -1,4 +1,4 @@
-package SimpleGoCache
+package simplegocache
 
 import (
 	"errors"
@@ -24,9 +24,10 @@ To check whether a key exists in cache use InCache(key). Returns a bool
 To delete a key use DeleteFromCache(key).
 
 To Update a cache entry use UpdateCache(content, key)
-
+a
 */
 
+// Cache - Contains references to cached objects
 type Cache struct {
 	CacheFolder string
 	TTL         int64
@@ -34,21 +35,24 @@ type Cache struct {
 	Files       map[string]File
 }
 
+// File - Contains info on a particular cached file
 type File struct {
 	Path    string
 	TTL     int64
 	Created int64
 }
 
-func NewCache(folder string, TTL int64, prefix string) (*Cache, error) {
+// NewCache - Initiates a new cache
+func NewCache(folder string, ttl int64, prefix string) (*Cache, error) {
 	var tmpFolder string
 	tmpFolder, err := ioutil.TempDir(folder, prefix)
 	if err != nil {
 		log.Println("Unable to create temp folder for cache: " + err.Error())
 	}
-	return &Cache{CacheFolder: tmpFolder, TTL: TTL, Prefix: prefix, Files: make(map[string]File)}, nil
+	return &Cache{CacheFolder: tmpFolder, TTL: ttl, Prefix: prefix, Files: make(map[string]File)}, nil
 }
 
+// Close - Remove cached files
 func (c *Cache) Close() {
 	err := os.RemoveAll(c.CacheFolder)
 	if err != nil {
@@ -56,6 +60,7 @@ func (c *Cache) Close() {
 	}
 }
 
+// AddToCache - Add []byte to cache with key
 func (c *Cache) AddToCache(content []byte, key string) error {
 	// check that file does not exist
 	if c.InCache(key) {
@@ -82,6 +87,7 @@ func (c *Cache) AddToCache(content []byte, key string) error {
 	return nil
 }
 
+// ReadFromCache - Read the value of a given key from cache
 func (c *Cache) ReadFromCache(key string) ([]byte, error) {
 	if c.InCache(key) {
 		content, err := ioutil.ReadFile(c.Files[key].Path)
@@ -89,23 +95,25 @@ func (c *Cache) ReadFromCache(key string) ([]byte, error) {
 			return []byte{}, err
 		}
 		return content, nil
-	} else {
-		return []byte{}, errors.New("Cannot find key: " + key + " in cache!")
 	}
+
+	return []byte{}, errors.New("Cannot find key: " + key + " in cache!")
 }
 
+// InCache - Check if a key is registered in cache
 func (c *Cache) InCache(key string) bool {
 	if _, ok := c.Files[key]; ok {
 		if (time.Now().Unix() - c.Files[key].Created) > c.Files[key].TTL {
 			delete(c.Files, key)
-		} else {
-			return true
 		}
+
+		return true
 	}
 
 	return false
 }
 
+// DeleteFromCache - Delete an object from cache
 func (c *Cache) DeleteFromCache(key string) error {
 	if _, ok := c.Files[key]; ok {
 		err := os.Remove(c.Files[key].Path)
@@ -114,11 +122,12 @@ func (c *Cache) DeleteFromCache(key string) error {
 		}
 		delete(c.Files, key)
 		return nil
-	} else {
-		return errors.New("key doesn't exist in cache")
 	}
+
+	return errors.New("key doesn't exist in cache")
 }
 
+// UpdateCache - Update the contents of a key already in cache
 func (c *Cache) UpdateCache(content []byte, key string) error {
 	err := c.DeleteFromCache(key)
 	if err != nil {
@@ -128,6 +137,6 @@ func (c *Cache) UpdateCache(content []byte, key string) error {
 	if err != nil {
 		return err
 	}
-	return nil
 
+	return nil
 }

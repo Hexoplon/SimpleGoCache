@@ -1,4 +1,4 @@
-package SimpleGoCache
+package simplegocache
 
 import (
 	"io/ioutil"
@@ -12,13 +12,16 @@ import (
 	"gotest.tools/assert"
 )
 
+const test = "test"
+
 func Test_AddToCache(t *testing.T) {
 	//create tmp string to cache
 	content := "This is a cache add test"
-	testKey := "test"
+	testKey := test
+	prefix := test
 
 	//Create new cache
-	cache, err := assignment1.NewCache("", 60, "test")
+	cache, err := assignment1.NewCache("", 60, prefix)
 	//Check for errors when creating cache
 	assert.NilError(t, err)
 	defer cache.Close()
@@ -30,6 +33,7 @@ func Test_AddToCache(t *testing.T) {
 	//Test content of file
 	tmpfnpath := cache.Files[testKey].Path
 	readContent, err := ioutil.ReadFile(tmpfnpath)
+	assert.NilError(t, err)
 
 	assert.Equal(t, string(readContent), content)
 }
@@ -38,17 +42,19 @@ func Test_ReadFromCache(t *testing.T) {
 	//setup cache
 	//create tmp string to cache
 	content := "This is a cache read test"
-	testKey := "test"
+	testKey := test
+	prefix := test
 
 	//Create new cache
-	cache, err := assignment1.NewCache("", 60, "test")
-	//Check for errors when creating cache
+	cache, err := assignment1.NewCache("", 60, prefix)
+	//Check for errors when creating cach
 	assert.NilError(t, err)
 	defer cache.Close()
 
 	//Setup cache file
 	tmpfnpath := filepath.Join(cache.CacheFolder, "testfile.cache")
-	ioutil.WriteFile(tmpfnpath, []byte(content), 0666)
+	err = ioutil.WriteFile(tmpfnpath, []byte(content), 0666)
+	assert.NilError(t, err)
 
 	// Manually add file to cache
 	cache.Files[testKey] = assignment1.File{
@@ -59,9 +65,9 @@ func Test_ReadFromCache(t *testing.T) {
 
 	//Attempt to read from cache
 	readContent, err := cache.ReadFromCache(testKey)
+	assert.NilError(t, err)
 
 	assert.Equal(t, string(readContent), content)
-
 }
 
 func Test_DeleteFromCache(t *testing.T) {
@@ -85,7 +91,8 @@ func Test_DeleteFromCache(t *testing.T) {
 
 	for i, v := range testFiles {
 		cache.Files[testKeys[i]] = v
-		ioutil.WriteFile(cache.Files[testKeys[i]].Path, []byte("This is a test file"), 0666)
+		err := ioutil.WriteFile(cache.Files[testKeys[i]].Path, []byte("This is a test file"), 0666)
+		assert.NilError(t, err)
 	}
 
 	//Delete first entry
@@ -104,24 +111,25 @@ func Test_DeleteFromCache(t *testing.T) {
 	for _, v := range cache.Files {
 		os.Remove(v.Path)
 	}
-
 }
 
 func Test_UpdateCache(t *testing.T) {
 	//setup cache
 	//create tmp string to cache
 	content := "This is a cache read test"
-	testKey := "test"
+	testKey := test
+	prefix := test
 
 	//Create new cache
-	cache, err := assignment1.NewCache("", 60, "test")
+	cache, err := assignment1.NewCache("", 60, prefix)
 	//Check for errors when creating cache
 	assert.NilError(t, err)
 	defer cache.Close()
 
 	//Setup cache file
 	tmpfnpath := filepath.Join(cache.CacheFolder, "testfile.cache")
-	ioutil.WriteFile(tmpfnpath, []byte(content), 0666)
+	err = ioutil.WriteFile(tmpfnpath, []byte(content), 0666)
+	assert.NilError(t, err)
 
 	// Manually add file to cache
 	cache.Files[testKey] = assignment1.File{
@@ -134,9 +142,9 @@ func Test_UpdateCache(t *testing.T) {
 	assert.NilError(t, err)
 
 	readContent, err := ioutil.ReadFile(cache.Files[testKey].Path)
+	assert.NilError(t, err)
 
 	assert.Equal(t, string(readContent), updatedContent)
-
 }
 
 func Test_InCache(t *testing.T) {
@@ -153,8 +161,9 @@ func Test_InCache(t *testing.T) {
 	}
 
 	testKeys := []string{"a", "b"}
+	prefix := test
 
-	cache, err := assignment1.NewCache("", 20, "test")
+	cache, err := assignment1.NewCache("", 20, prefix)
 	assert.NilError(t, err)
 	defer cache.Close()
 
