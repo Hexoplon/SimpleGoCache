@@ -40,6 +40,10 @@ func (c *FileCache) Close() {
 	if err != nil {
 		log.Println("Unable to remove tmp cache folder: " + err.Error())
 	}
+
+	for k := range c.Files {
+		delete(c.Files, k)
+	}
 }
 
 // AddToCache - Add []byte to cache with key
@@ -86,7 +90,10 @@ func (c *FileCache) ReadFromCache(key string) ([]byte, error) {
 func (c *FileCache) InCache(key string) bool {
 	if _, ok := c.Files[key]; ok {
 		if c.expired(key) {
-			delete(c.Files, key)
+			err := c.DeleteFromCache(key)
+			if err != nil {
+				log.Println("Unable to remove element from cache")
+			}
 			return false
 		}
 
