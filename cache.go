@@ -49,23 +49,23 @@ func (c CacheStore) NewCache(ctx context.Context, req *NewCacheMsg, rsp *CacheMs
 	return nil
 }
 
-func (c CacheStore) Add(ctx context.Context, req *Entry, rsp *CacheMsg) error {
-
+func (c CacheStore) Add(ctx context.Context, req *EntryMsg, rsp *CacheMsg) error {
+	return nil
 }
 
-func (c CacheStore) Delete(ctx context.Context, req *Entry, rsp *Empty) error {
+func (c CacheStore) Delete(ctx context.Context, req *EntryMsg, rsp *Empty) error {
 	panic("implement me")
 }
 
-func (c CacheStore) Read(ctx context.Context, req *Entry, rsp *Entry) error {
+func (c CacheStore) Read(ctx context.Context, req *EntryMsg, rsp *EntryMsg) error {
 	panic("implement me")
 }
 
-func (c CacheStore) InCache(ctx context.Context, req *Entry, rsp *Bool) error {
+func (c CacheStore) InCache(ctx context.Context, req *EntryMsg, rsp *EntryMsg) error {
 	panic("implement me")
 }
 
-func (c CacheStore) Update(ctx context.Context, req *Entry, rsp *CacheMsg) error {
+func (c CacheStore) Update(ctx context.Context, req *EntryMsg, rsp *CacheMsg) error {
 	panic("implement me")
 }
 
