@@ -34,7 +34,7 @@ var _ server.Option
 // Client API for Cache service
 
 type CacheService interface {
-	NewCache(ctx context.Context, in *NewCacheMsg, opts ...client.CallOption) (*Empty, error)
+	NewCache(ctx context.Context, in *NewCacheMsg, opts ...client.CallOption) (*CacheMsg, error)
 	Add(ctx context.Context, in *EntryMsg, opts ...client.CallOption) (*CacheMsg, error)
 	Delete(ctx context.Context, in *EntryMsg, opts ...client.CallOption) (*Empty, error)
 	Read(ctx context.Context, in *EntryMsg, opts ...client.CallOption) (*EntryMsg, error)
@@ -62,9 +62,9 @@ func NewCacheService(name string, c client.Client) CacheService {
 	}
 }
 
-func (c *cacheService) NewCache(ctx context.Context, in *NewCacheMsg, opts ...client.CallOption) (*Empty, error) {
+func (c *cacheService) NewCache(ctx context.Context, in *NewCacheMsg, opts ...client.CallOption) (*CacheMsg, error) {
 	req := c.c.NewRequest(c.name, "Cache.NewCache", in)
-	out := new(Empty)
+	out := new(CacheMsg)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
 		return nil, err
@@ -145,7 +145,7 @@ func (c *cacheService) Close(ctx context.Context, in *Empty, opts ...client.Call
 // Server API for Cache service
 
 type CacheHandler interface {
-	NewCache(context.Context, *NewCacheMsg, *Empty) error
+	NewCache(context.Context, *NewCacheMsg, *CacheMsg) error
 	Add(context.Context, *EntryMsg, *CacheMsg) error
 	Delete(context.Context, *EntryMsg, *Empty) error
 	Read(context.Context, *EntryMsg, *EntryMsg) error
@@ -157,7 +157,7 @@ type CacheHandler interface {
 
 func RegisterCacheHandler(s server.Server, hdlr CacheHandler, opts ...server.HandlerOption) error {
 	type cache interface {
-		NewCache(ctx context.Context, in *NewCacheMsg, out *Empty) error
+		NewCache(ctx context.Context, in *NewCacheMsg, out *CacheMsg) error
 		Add(ctx context.Context, in *EntryMsg, out *CacheMsg) error
 		Delete(ctx context.Context, in *EntryMsg, out *Empty) error
 		Read(ctx context.Context, in *EntryMsg, out *EntryMsg) error
@@ -177,7 +177,7 @@ type cacheHandler struct {
 	CacheHandler
 }
 
-func (h *cacheHandler) NewCache(ctx context.Context, in *NewCacheMsg, out *Empty) error {
+func (h *cacheHandler) NewCache(ctx context.Context, in *NewCacheMsg, out *CacheMsg) error {
 	return h.CacheHandler.NewCache(ctx, in, out)
 }
 

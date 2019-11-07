@@ -2,7 +2,7 @@ syntax = "proto3";
 package simplegocache;
 
 service Cache {
-  rpc NewCache (NewCacheMsg) returns (Empty);
+  rpc NewCache (NewCacheMsg) returns (CacheMsg);
   rpc Add (EntryMsg) returns (CacheMsg);
   rpc Delete (EntryMsg) returns (Empty);
   rpc Read (EntryMsg) returns (EntryMsg);
