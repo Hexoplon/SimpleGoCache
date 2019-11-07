@@ -7,8 +7,6 @@ import (
 	"testing"
 	"time"
 
-	"git.gvk.idi.ntnu.no/zackeusb/assignment1"
-
 	"gotest.tools/assert"
 )
 
@@ -21,7 +19,7 @@ func Test_AddToCache(t *testing.T) {
 	prefix := test
 
 	//Create new cache
-	cache, err := assignment1.NewCache("", 60, prefix)
+	cache, err := NewFileCache("", 60, prefix)
 	//Check for errors when creating cache
 	assert.NilError(t, err)
 	defer cache.Close()
@@ -46,7 +44,7 @@ func Test_ReadFromCache(t *testing.T) {
 	prefix := test
 
 	//Create new cache
-	cache, err := assignment1.NewCache("", 60, prefix)
+	cache, err := NewFileCache("", 60, prefix)
 	//Check for errors when creating cach
 	assert.NilError(t, err)
 	defer cache.Close()
@@ -57,7 +55,7 @@ func Test_ReadFromCache(t *testing.T) {
 	assert.NilError(t, err)
 
 	// Manually add file to cache
-	cache.Files[testKey] = assignment1.File{
+	cache.Files[testKey] = File{
 		Path:    tmpfnpath,
 		TTL:     60,
 		Created: time.Now().Unix(),
@@ -71,7 +69,7 @@ func Test_ReadFromCache(t *testing.T) {
 }
 
 func Test_DeleteFromCache(t *testing.T) {
-	testFiles := []assignment1.File{{
+	testFiles := []File{{
 		Path:    "/tmp/test",
 		TTL:     10,
 		Created: time.Now().Unix(),
@@ -85,7 +83,7 @@ func Test_DeleteFromCache(t *testing.T) {
 
 	testKeys := []string{"a", "b"}
 
-	cache, err := assignment1.NewCache("", 20, "test")
+	cache, err := NewFileCache("", 20, "test")
 	assert.NilError(t, err)
 	defer cache.Close()
 
@@ -121,7 +119,7 @@ func Test_UpdateCache(t *testing.T) {
 	prefix := test
 
 	//Create new cache
-	cache, err := assignment1.NewCache("", 60, prefix)
+	cache, err := NewFileCache("", 60, prefix)
 	//Check for errors when creating cache
 	assert.NilError(t, err)
 	defer cache.Close()
@@ -132,7 +130,7 @@ func Test_UpdateCache(t *testing.T) {
 	assert.NilError(t, err)
 
 	// Manually add file to cache
-	cache.Files[testKey] = assignment1.File{
+	cache.Files[testKey] = File{
 		Path:    tmpfnpath,
 		TTL:     60,
 		Created: time.Now().Unix(),
@@ -148,7 +146,7 @@ func Test_UpdateCache(t *testing.T) {
 }
 
 func Test_InCache(t *testing.T) {
-	testFiles := []assignment1.File{{
+	testFiles := []File{{
 		Path:    "/tmp/test",
 		TTL:     10,
 		Created: time.Now().Unix(),
@@ -163,7 +161,7 @@ func Test_InCache(t *testing.T) {
 	testKeys := []string{"a", "b"}
 	prefix := test
 
-	cache, err := assignment1.NewCache("", 20, prefix)
+	cache, err := NewFileCache("", 20, prefix)
 	assert.NilError(t, err)
 	defer cache.Close()
 
