@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 
 	proto "github.com/Hexoplon/SimpleGoCache"
@@ -15,6 +16,10 @@ func main() {
 	err := proto.RegisterCacheHandler(service.Server(), &proto.CacheStore{})
 	if err != nil {
 		log.Fatalln(proto.ErrorStartCacheHandler, err)
+	}
+
+	if err := service.Run(); err != nil {
+		fmt.Println(err)
 	}
 
 }

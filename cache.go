@@ -34,11 +34,13 @@ type Cache interface {
 	expired()
 }
 
+// Stores caches from different services
 type CacheStore struct {
 	Caches map[string]*MemCache
 }
 
 func (c CacheStore) NewCache(ctx context.Context, req *NewCacheMsg, rsp *CacheMsg) error {
+	c.Caches = make(map[string]*MemCache)
 	if _, ok := c.Caches[req.Key]; !ok {
 		c.Caches[req.Key] = NewMemCache(req.Ttl, int(req.MaxElements), int(req.MaxElementSize))
 		rsp.Msg = MsgOk
@@ -61,7 +63,7 @@ func (c CacheStore) Read(ctx context.Context, req *EntryMsg, rsp *EntryMsg) erro
 	panic("implement me")
 }
 
-func (c CacheStore) InCache(ctx context.Context, req *EntryMsg, rsp *EntryMsg) error {
+func (c CacheStore) InCache(ctx context.Context, req *EntryMsg, rsp *Bool) error {
 	panic("implement me")
 }
 
