@@ -22,6 +22,7 @@ message NewCacheMsg {
 message Entry {
   bytes content = 1;
   string key = 2;
+  string cacheKey = 3;
 }
 
 message CacheMsg {

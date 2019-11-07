@@ -2,7 +2,6 @@ package simplegocache
 
 import (
 	"context"
-	"net"
 )
 
 /*
@@ -36,16 +35,22 @@ type Cache interface {
 }
 
 type CacheStore struct {
-	Caches map[string]MemCache
+	Caches map[string]*MemCache
 }
 
-func (c CacheStore) NewCache(ctx context.Context, req *Entry, rsp *Empty) error {
-	c.Caches[req.Key] =
+func (c CacheStore) NewCache(ctx context.Context, req *NewCacheMsg, rsp *CacheMsg) error {
+	if _, ok := c.Caches[req.Key]; !ok {
+		c.Caches[req.Key] = NewMemCache(req.Ttl, int(req.MaxElements), int(req.MaxElementSize))
+		rsp.Msg = MsgOk
+	} else {
+		rsp.Msg = MsgNotOk
+	}
+
 	return nil
 }
 
 func (c CacheStore) Add(ctx context.Context, req *Entry, rsp *CacheMsg) error {
-	panic("implement me")
+
 }
 
 func (c CacheStore) Delete(ctx context.Context, req *Entry, rsp *Empty) error {
