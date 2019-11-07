@@ -1,0 +1,15 @@
+syntax = "proto3";
+package simplegocache;
+
+service Cache {
+  rpc Add (Entry) returns (CacheMsg)
+}
+
+message Entry {
+  bytes content = 1;
+  string key = 2;
+}
+
+message CacheMsg {
+  string msg = 1;
+}
