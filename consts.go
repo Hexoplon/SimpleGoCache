@@ -30,11 +30,3 @@ const MB = KB * 1024
 
 // GB - gigabyte
 const GB = MB * 1024
-
-// Msg
-
-// MsgOk - ok
-const MsgOk = "ok"
-
-// MsgNotOk - not ok
-const MsgNotOk = "!ok"
