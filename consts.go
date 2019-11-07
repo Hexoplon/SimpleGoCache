@@ -17,6 +17,9 @@ const ErrorNoEntry = "No entry found for given key"
 // ErrorCanNotDelete - Unable to delete entry
 const ErrorCanNotDelete = "Unable to delete entry"
 
+// ErrorStartCacheHandler - Could not start Cache handler
+const ErrorStartCacheHandler = "Could not start Cache handler"
+
 // Sizes
 
 // KB - kilobyte

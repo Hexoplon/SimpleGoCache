@@ -1,5 +1,10 @@
 package simplegocache
 
+import (
+	"context"
+	"net"
+)
+
 /*
 
 Implements file based caching
@@ -30,6 +35,39 @@ type Cache interface {
 	expired()
 }
 
-// CacheStore - Stores and manages caches
 type CacheStore struct {
+	Caches map[string]MemCache
+}
+
+func (c CacheStore) NewCache(ctx context.Context, req *Entry, rsp *Empty) error {
+	c.Caches[req.Key] =
+	return nil
+}
+
+func (c CacheStore) Add(ctx context.Context, req *Entry, rsp *CacheMsg) error {
+	panic("implement me")
+}
+
+func (c CacheStore) Delete(ctx context.Context, req *Entry, rsp *Empty) error {
+	panic("implement me")
+}
+
+func (c CacheStore) Read(ctx context.Context, req *Entry, rsp *Entry) error {
+	panic("implement me")
+}
+
+func (c CacheStore) InCache(ctx context.Context, req *Entry, rsp *Bool) error {
+	panic("implement me")
+}
+
+func (c CacheStore) Update(ctx context.Context, req *Entry, rsp *CacheMsg) error {
+	panic("implement me")
+}
+
+func (c CacheStore) Prune(ctx context.Context, req *Empty, rsp *Empty) error {
+	panic("implement me")
+}
+
+func (c CacheStore) Close(ctx context.Context, req *Empty, rsp *Empty) error {
+	panic("implement me")
 }
