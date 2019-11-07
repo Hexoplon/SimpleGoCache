@@ -29,3 +29,7 @@ type Cache interface {
 	Close()
 	expired()
 }
+
+// CacheStore - Stores and manages caches
+type CacheStore struct {
+}

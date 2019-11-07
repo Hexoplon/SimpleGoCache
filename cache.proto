@@ -2,13 +2,14 @@ syntax = "proto3";
 package simplegocache;
 
 service Cache {
-  rpc Add (Entry) returns (CacheMsg)
-  rpc Delete (Entry) returns (Empty)
-  rpc Read (Entry) returns (Entry)
-  rpc InCache (Entry) returns (Bool)
-  rpc Update (Entry) returns (CacheMsg)
-  rpc Prune (Empty) returns (Empty)
-  rpc Close (Empty) returns (Empty)
+  rpc NewCache (Entry) returns (Empty);
+  rpc Add (Entry) returns (CacheMsg);
+  rpc Delete (Entry) returns (Empty);
+  rpc Read (Entry) returns (Entry);
+  rpc InCache (Entry) returns (Bool);
+  rpc Update (Entry) returns (CacheMsg);
+  rpc Prune (Empty) returns (Empty);
+  rpc Close (Empty) returns (Empty);
 }
 
 message Entry {
