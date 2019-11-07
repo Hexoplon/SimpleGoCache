@@ -3,6 +3,12 @@ package simplegocache;
 
 service Cache {
   rpc Add (Entry) returns (CacheMsg)
+  rpc Delete (Entry) returns (Empty)
+  rpc Read (Entry) returns (Entry)
+  rpc InCache (Entry) returns (Bool)
+  rpc Update (Entry) returns (CacheMsg)
+  rpc Prune (Empty) returns (Empty)
+  rpc Close (Empty) returns (Empty)
 }
 
 message Entry {
@@ -12,4 +18,13 @@ message Entry {
 
 message CacheMsg {
   string msg = 1;
+}
+
+message Bool {
+  bool in_cache = 1;
+}
+
+
+message Empty {
+
 }
